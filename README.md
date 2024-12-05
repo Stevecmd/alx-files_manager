@@ -46,3 +46,17 @@ At the end of this project, you are expected to be able to explain to anyone, wi
 - how to store data in MongoDB
 - how to store temporary data in Redis
 - how to setup and use a background worker
+
+### Redis
+To stop Redis run:
+```sh
+sudo systemctl stop redis
+sudo systemctl disable redis
+
+```
+
+Verify if Redis Has Stopped
+```sh
+ps aux | grep redis-server
+
+```
