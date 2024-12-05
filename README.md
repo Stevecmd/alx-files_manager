@@ -60,3 +60,13 @@ Verify if Redis Has Stopped
 ps aux | grep redis-server
 
 ```
+
+Running Redis as a Docker container:
+Build
+```sh
+docker build -t my-redis-server -f Dockerfile-redis .
+```
+Run
+```sh
+docker run -d -p 6379:6379 --name my-redis-container my-redis-server
+```
