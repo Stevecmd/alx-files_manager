@@ -202,3 +202,51 @@ true
 30
 ```
 File: `utils/db.js`
+
+2. First API
+Inside `server.js`, create the Express server:
+
+- it should listen on the port set by the environment variable `PORT` or by default 5000
+- it should load all routes from the file `routes/index.js`
+
+Inside the folder `routes`, create a file `index.js` that contains all endpoints of our API:
+
+- `GET /status` => `AppController.getStatus`
+- `GET /stats` => `AppController.getStats`
+
+Inside the folder `controllers`, create a file `AppController.js` that contains the definition of the 2 endpoints:
+
+- `GET /status` should return if Redis is alive and if the DB is alive too by using the 2 utils created previously: `{ "redis": true, "db": true }` with a status code 200
+-` GET /stats` should return the number of users and files in DB: `{ "users": 12, "files": 1231 }` with a status code 200
+    - `users` collection must be used for counting all users
+    - `files` collection must be used for counting all files
+
+Terminal 1:
+```sh
+
+npm run start-server
+
+> files_manager@1.0.0 start-server
+> nodemon --exec babel-node --presets @babel/preset-env ./server.js
+
+[nodemon] 2.0.22
+[nodemon] to restart at any time, enter `rs`
+[nodemon] watching path(s): *.*
+[nodemon] watching extensions: js,mjs,json
+[nodemon] starting `babel-node --presets @babel/preset-env ./server.js`
+Server running on port 5000
+Redis client connected to the server
+Promise { <pending> }
+MongoDB client connected to the server
+
+```
+
+Terminal :
+```sh
+
+steve@ubuntu$ curl 0.0.0.0:5000/status ; echo ""
+{"redis":true,"db":true}
+steve@ubuntu$ curl 0.0.0.0:5000/stats ; echo ""
+{"users":0,"files":0}
+
+```
