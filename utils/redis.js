@@ -17,11 +17,31 @@ class RedisClient {
 
     this.client.on('connect', () => {
       console.log('Redis client connected to the server');
+      this.connected = true;
     });
 
     this.getAsync = promisify(this.client.get).bind(this.client);
     this.setAsync = promisify(this.client.set).bind(this.client);
     this.delAsync = promisify(this.client.del).bind(this.client);
+
+    // Wait for the Redis client to connect before proceeding
+    this.waitForConnection().then(() => {
+      console.log(this.isAlive());
+    });
+  }
+
+  /**
+   * Wait for the Redis client to connect.
+   */
+  async waitForConnection () {
+    if (!this.connected) {
+      await new Promise((resolve) => {
+        this.client.on('connect', () => {
+          this.connected = true;
+          resolve();
+        });
+      });
+    }
   }
 
   /**
@@ -40,6 +60,7 @@ class RedisClient {
    * @return {Promise<string|null>} The value associated with the key, or null if no value is associated.
    */
   async get (key) {
+    await this.waitForConnection();
     return this.getAsync(key);
   }
 
@@ -52,6 +73,7 @@ class RedisClient {
    *   indefinitely.
    */
   async set (key, value, duration) {
+    await this.waitForConnection();
     await this.setAsync(key, value);
     this.client.expire(key, duration);
   }
@@ -63,6 +85,7 @@ class RedisClient {
    * @return {Promise<number>} A promise that resolves to the number of keys that were removed.
    */
   async del (key) {
+    await this.waitForConnection();
     return this.delAsync(key);
   }
 }
