@@ -6,7 +6,7 @@ import dbClient from '../utils/db.js';
 import redisClient from '../utils/redis.js';
 
 class FilesController {
-  static async postUpload (req, res) {
+  static async postUpload(req, res) {
     const token = req.headers['x-token'];
     if (!token) {
       return res.status(401).json({ error: 'Unauthorized' });
@@ -19,7 +19,13 @@ class FilesController {
       return res.status(401).json({ error: 'Unauthorized' });
     }
 
-    const { name, type, parentId = 0, isPublic = false, data } = req.body;
+    const {
+      name,
+      type,
+      parentId = 0,
+      isPublic = false,
+      data,
+    } = req.body;
 
     if (!name) {
       return res.status(400).json({ error: 'Missing name' });
@@ -48,7 +54,7 @@ class FilesController {
       name,
       type,
       isPublic,
-      parentId: parentId === 0 ? 0 : new ObjectId(parentId)
+      parentId: parentId === 0 ? 0 : new ObjectId(parentId),
     };
 
     if (type === 'folder') {
@@ -59,7 +65,7 @@ class FilesController {
         name,
         type,
         isPublic,
-        parentId
+        parentId,
       });
     }
 
@@ -80,11 +86,11 @@ class FilesController {
       name,
       type,
       isPublic,
-      parentId
+      parentId,
     });
   }
 
-  static async getShow (req, res) {
+  static async getShow(req, res) {
     const token = req.headers['x-token'];
     if (!token) {
       return res.status(401).json({ error: 'Unauthorized' });
@@ -107,7 +113,7 @@ class FilesController {
     return res.status(200).json(file);
   }
 
-  static async getIndex (req, res) {
+  static async getIndex(req, res) {
     const token = req.headers['x-token'];
     if (!token) {
       return res.status(401).json({ error: 'Unauthorized' });

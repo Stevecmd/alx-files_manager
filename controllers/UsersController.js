@@ -4,7 +4,7 @@ import dbClient from '../utils/db.js';
 import redisClient from '../utils/redis.js';
 
 class UsersController {
-  static async postNew (req, res) {
+  static async postNew(req, res) {
     const { email, password } = req.body;
 
     if (!email) {
@@ -26,7 +26,7 @@ class UsersController {
     return res.status(201).json({ id: result.insertedId, email });
   }
 
-  static async getMe (req, res) {
+  static async getMe(req, res) {
     const token = req.headers['x-token'];
     if (!token) {
       return res.status(401).json({ error: 'Unauthorized' });
