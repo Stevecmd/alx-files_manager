@@ -4,7 +4,8 @@ class DBClient {
   /**
    * Construct a new DB client.
    *
-   * Creates a new connection to MongoDB server and sets up event listeners for connection
+   * Creates a new connection to MongoDB server and
+   * sets up event listeners for connection
    * and error events.
    */
   constructor () {
@@ -28,9 +29,11 @@ class DBClient {
   }
 
   /**
-   * Returns a boolean indicating whether the client is connected to the MongoDB server.
+   * Returns a boolean indicating whether the client
+   * is connected to the MongoDB server.
    *
-   * @return {boolean} true if the client is connected, false otherwise
+   * @return {boolean} true if the client is connected,
+   * false otherwise
    */
   isAlive () {
     return this.connected;
@@ -39,7 +42,8 @@ class DBClient {
   /**
    * Returns the number of documents in the collection users.
    *
-   * @return {Promise<number>} The number of documents in the collection users.
+   * @return {Promise<number>} The number of documents in
+   * the collection users.
    */
   async nbUsers () {
     if (!this.connected) {
@@ -51,7 +55,8 @@ class DBClient {
   /**
    * Returns the number of documents in the collection files.
    *
-   * @return {Promise<number>} The number of documents in the collection files.
+   * @return {Promise<number>} The number of documents in
+   * the collection files.
    */
   async nbFiles () {
     if (!this.connected) {
