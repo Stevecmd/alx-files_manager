@@ -8,7 +8,7 @@ class DBClient {
    * sets up event listeners for connection
    * and error events.
    */
-  constructor () {
+  constructor() {
     const host = process.env.DB_HOST || 'localhost';
     const port = process.env.DB_PORT || 27017;
     const database = process.env.DB_DATABASE || 'files_manager';
@@ -35,7 +35,7 @@ class DBClient {
    * @return {boolean} true if the client is connected,
    * false otherwise
    */
-  isAlive () {
+  isAlive() {
     return this.connected;
   }
 
@@ -45,7 +45,7 @@ class DBClient {
    * @return {Promise<number>} The number of documents in
    * the collection users.
    */
-  async nbUsers () {
+  async nbUsers() {
     if (!this.connected) {
       return 0;
     }
@@ -58,7 +58,7 @@ class DBClient {
    * @return {Promise<number>} The number of documents in
    * the collection files.
    */
-  async nbFiles () {
+  async nbFiles() {
     if (!this.connected) {
       return 0;
     }
