@@ -6,8 +6,10 @@ class RedisClient {
   /**
    * Construct a new Redis client.
    *
-   * It creates a new connection to Redis server and sets up event listeners for connection
-   * and error events. It also creates promisified versions of get, set, and del methods.
+   * It creates a new connection to Redis server and
+   * sets up event listeners for connection and error events.
+   * It also creates promisified versions of get, set,
+   * and del methods.
    */
   constructor() {
     this.client = createClient();
@@ -47,9 +49,11 @@ class RedisClient {
   }
 
   /**
-   * Returns a boolean indicating whether the client is connected to the Redis server.
+   * Returns a boolean indicating whether the client is
+   * connected to the Redis server.
    *
-   * @return {boolean} true if the client is connected, false otherwise
+   * @return {boolean} true if the client is connected,
+   * false otherwise
    */
   async isAlive() {
     await this.waitForConnection();
@@ -73,8 +77,8 @@ class RedisClient {
    *
    * @param {string} key
    * @param {string} value
-   * @param {number} [duration] The TTL in seconds. If not provided, the value will persist
-   *   indefinitely.
+   * @param {number} [duration] The TTL in seconds. If not provided,
+   * the value will persist indefinitely.
    */
   async set(key, value, duration) {
     await this.waitForConnection();
@@ -86,7 +90,8 @@ class RedisClient {
    * Deletes a value from Redis by key.
    *
    * @param {string} key - The key of the value to delete.
-   * @return {Promise<number>} A promise that resolves to the number of keys that were removed.
+   * @return {Promise<number>} A promise that resolves to the
+   * number of keys that were removed.
    */
   async del(key) {
     await this.waitForConnection();
