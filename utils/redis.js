@@ -11,7 +11,7 @@ class RedisClient {
    * It also creates promisified versions of get, set,
    * and del methods.
    */
-  constructor() {
+  constructor () {
     this.client = createClient();
     this.connected = false;
 
@@ -37,7 +37,7 @@ class RedisClient {
   /**
    * Wait for the Redis client to connect.
    */
-  async waitForConnection() {
+  async waitForConnection () {
     if (!this.connected) {
       await new Promise((resolve) => {
         this.client.on('connect', () => {
@@ -55,7 +55,7 @@ class RedisClient {
    * @return {boolean} true if the client is connected,
    * false otherwise
    */
-  async isAlive() {
+  async isAlive () {
     await this.waitForConnection();
     return this.client.connected;
   }
@@ -67,7 +67,7 @@ class RedisClient {
    * @return {Promise<string|null>} The value associated with the key,
    * or null if no value is associated.
    */
-  async get(key) {
+  async get (key) {
     await this.waitForConnection();
     return this.getAsync(key);
   }
@@ -80,7 +80,7 @@ class RedisClient {
    * @param {number} [duration] The TTL in seconds. If not provided,
    * the value will persist indefinitely.
    */
-  async set(key, value, duration) {
+  async set (key, value, duration) {
     await this.waitForConnection();
     await this.setAsync(key, value);
     this.client.expire(key, duration);
@@ -93,7 +93,7 @@ class RedisClient {
    * @return {Promise<number>} A promise that resolves to the
    * number of keys that were removed.
    */
-  async del(key) {
+  async del (key) {
     await this.waitForConnection();
     return this.delAsync(key);
   }
