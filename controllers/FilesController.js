@@ -6,7 +6,7 @@ import dbClient from '../utils/db.js';
 import redisClient from '../utils/redis.js';
 
 class FilesController {
-  static async postUpload(req, res) {
+  static async postUpload (req, res) {
     const token = req.headers['x-token'];
     if (!token) {
       return res.status(401).json({ error: 'Unauthorized' });
@@ -24,7 +24,7 @@ class FilesController {
       type,
       parentId = 0,
       isPublic = false,
-      data,
+      data
     } = req.body;
 
     if (!name) {
@@ -39,8 +39,9 @@ class FilesController {
       return res.status(400).json({ error: 'Missing data' });
     }
 
+    const parentObjectId = parentId === 0 ? 0 : new ObjectId(parentId);
     if (parentId !== 0) {
-      const parentFile = await dbClient.db.collection('files').findOne({ _id: new ObjectId(parentId) });
+      const parentFile = await dbClient.db.collection('files').findOne({ _id: parentObjectId });
       if (!parentFile) {
         return res.status(400).json({ error: 'Parent not found' });
       }
@@ -54,7 +55,7 @@ class FilesController {
       name,
       type,
       isPublic,
-      parentId: parentId === 0 ? 0 : new ObjectId(parentId),
+      parentId: parentObjectId
     };
 
     if (type === 'folder') {
@@ -65,7 +66,7 @@ class FilesController {
         name,
         type,
         isPublic,
-        parentId,
+        parentId
       });
     }
 
@@ -86,11 +87,11 @@ class FilesController {
       name,
       type,
       isPublic,
-      parentId,
+      parentId
     });
   }
 
-  static async getShow(req, res) {
+  static async getShow (req, res) {
     const token = req.headers['x-token'];
     if (!token) {
       return res.status(401).json({ error: 'Unauthorized' });
@@ -113,7 +114,7 @@ class FilesController {
     return res.status(200).json(file);
   }
 
-  static async getIndex(req, res) {
+  static async getIndex (req, res) {
     const token = req.headers['x-token'];
     if (!token) {
       return res.status(401).json({ error: 'Unauthorized' });
@@ -126,13 +127,13 @@ class FilesController {
       return res.status(401).json({ error: 'Unauthorized' });
     }
 
-    const parentId = req.query.parentId || 0;
+    const parentId = req.query.parentId || '0';
     const page = parseInt(req.query.page, 10) || 0;
     const pageSize = 20;
     const skip = page * pageSize;
 
     const query = { userId: new ObjectId(userId) };
-    if (parentId !== 0) {
+    if (parentId !== '0') {
       query.parentId = new ObjectId(parentId);
     } else {
       query.parentId = 0;
