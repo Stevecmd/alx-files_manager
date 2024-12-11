@@ -218,7 +218,11 @@ class FilesController {
     }
 
     const fileId = req.params.id;
-    const file = await dbClient.db.collection('files').findOne({ _id: new ObjectId(fileId), userId: new ObjectId(userId) });
+    const size = req.query.size;
+    const file = await dbClient.db.collection('files').findOne({
+      _id: new ObjectId(fileId),
+      userId: new ObjectId(userId)
+    });
 
     if (!file) {
       return res.status(404).json({ error: 'Not found' });
@@ -228,13 +232,18 @@ class FilesController {
       return res.status(400).json({ error: 'A folder doesn\'t have data' });
     }
 
-    const filePath = file.localPath;
+    let filePath = file.localPath;
+    if (size && ['500', '250', '100'].includes(size)) {
+      filePath = `${filePath}_${size}`;
+    }
+
     if (!fs.existsSync(filePath)) {
       return res.status(404).json({ error: 'Not found' });
     }
 
     const fileData = fs.readFileSync(filePath);
-    res.setHeader('Content-Type', 'application/octet-stream');
+    const mimeType = file.type === 'image' ? 'image/png' : 'application/octet-stream';
+    res.setHeader('Content-Type', mimeType);
     return res.send(fileData);
   }
 }
