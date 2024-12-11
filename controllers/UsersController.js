@@ -1,10 +1,14 @@
+import Bull from 'bull';
 import sha1 from 'sha1';
 import { ObjectId } from 'mongodb';
 import dbClient from '../utils/db.js';
 import redisClient from '../utils/redis.js';
 
+// Create Bull queue for user emails
+const userQueue = new Bull('userQueue');
+
 class UsersController {
-  static async postNew(req, res) {
+  static async postNew (req, res) {
     const { email, password } = req.body;
 
     if (!email) {
@@ -21,12 +25,20 @@ class UsersController {
     }
 
     const hashedPassword = sha1(password);
-    const result = await dbClient.db.collection('users').insertOne({ email, password: hashedPassword });
+    const result = await dbClient.db.collection('users').insertOne({
+      email,
+      password: hashedPassword
+    });
+
+    // Add welcome email job to queue
+    await userQueue.add({
+      userId: result.insertedId.toString()
+    });
 
     return res.status(201).json({ id: result.insertedId, email });
   }
 
-  static async getMe(req, res) {
+  static async getMe (req, res) {
     const token = req.headers['x-token'];
     if (!token) {
       return res.status(401).json({ error: 'Unauthorized' });

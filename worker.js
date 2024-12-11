@@ -4,8 +4,11 @@ import dbClient from './utils/db.js';
 import imageThumbnail from 'image-thumbnail';
 import fs from 'fs';
 
+// Create Bull queues
 const fileQueue = new Bull('fileQueue');
+const userQueue = new Bull('userQueue');
 
+// Process file queue
 fileQueue.process(async (job, done) => {
   const { userId, fileId } = job.data;
 
@@ -39,4 +42,24 @@ fileQueue.process(async (job, done) => {
     console.error('Error generating thumbnails:', error);
     throw error;
   }
+});
+
+// Process user queue
+userQueue.process(async (job, done) => {
+  const { userId } = job.data;
+
+  if (!userId) {
+    throw new Error('Missing userId');
+  }
+
+  const user = await dbClient.db.collection('users').findOne({
+    _id: new ObjectId(userId)
+  });
+
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+  console.log(`Welcome ${user.email}!`);
+  done();
 });
