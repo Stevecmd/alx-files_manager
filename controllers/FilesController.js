@@ -2,11 +2,11 @@ import { v4 as uuidv4 } from 'uuid';
 import { ObjectId } from 'mongodb';
 import fs from 'fs';
 import path from 'path';
-import dbClient from '../utils/db.js';
-import redisClient from '../utils/redis.js';
+import dbClient from '../utils/db';
+import redisClient from '../utils/redis';
 
 class FilesController {
-  static async postUpload (req, res) {
+  static async postUpload(req, res) {
     const token = req.headers['x-token'];
     if (!token) {
       return res.status(401).json({ error: 'Unauthorized' });
@@ -24,7 +24,7 @@ class FilesController {
       type,
       parentId = 0,
       isPublic = false,
-      data
+      data,
     } = req.body;
 
     if (!name) {
@@ -55,7 +55,7 @@ class FilesController {
       name,
       type,
       isPublic,
-      parentId: parentObjectId
+      parentId: parentObjectId,
     };
 
     if (type === 'folder') {
@@ -66,7 +66,7 @@ class FilesController {
         name,
         type,
         isPublic,
-        parentId
+        parentId,
       });
     }
 
@@ -87,11 +87,11 @@ class FilesController {
       name,
       type,
       isPublic,
-      parentId
+      parentId,
     });
   }
 
-  static async getShow (req, res) {
+  static async getShow(req, res) {
     const token = req.headers['x-token'];
     if (!token) {
       return res.status(401).json({ error: 'Unauthorized' });
@@ -114,7 +114,7 @@ class FilesController {
     return res.status(200).json(file);
   }
 
-  static async getIndex (req, res) {
+  static async getIndex(req, res) {
     const token = req.headers['x-token'];
     if (!token) {
       return res.status(401).json({ error: 'Unauthorized' });
@@ -148,7 +148,7 @@ class FilesController {
     return res.status(200).json(files);
   }
 
-  static async putPublish (req, res) {
+  static async putPublish(req, res) {
     const token = req.headers['x-token'];
     if (!token) {
       return res.status(401).json({ error: 'Unauthorized' });
@@ -170,13 +170,13 @@ class FilesController {
 
     await dbClient.db.collection('files').updateOne(
       { _id: new ObjectId(fileId) },
-      { $set: { isPublic: true } }
+      { $set: { isPublic: true } },
     );
 
     return res.status(200).json({ message: 'File published' });
   }
 
-  static async putUnpublish (req, res) {
+  static async putUnpublish(req, res) {
     const token = req.headers['x-token'];
     if (!token) {
       return res.status(401).json({ error: 'Unauthorized' });
@@ -198,13 +198,13 @@ class FilesController {
 
     await dbClient.db.collection('files').updateOne(
       { _id: new ObjectId(fileId) },
-      { $set: { isPublic: false } }
+      { $set: { isPublic: false } },
     );
 
     return res.status(200).json({ message: 'File unpublished' });
   }
 
-  static async getFile (req, res) {
+  static async getFile(req, res) {
     const token = req.headers['x-token'];
     if (!token) {
       return res.status(401).json({ error: 'Unauthorized' });
@@ -218,10 +218,10 @@ class FilesController {
     }
 
     const fileId = req.params.id;
-    const size = req.query.size;
+    const { size } = req.query;
     const file = await dbClient.db.collection('files').findOne({
       _id: new ObjectId(fileId),
-      userId: new ObjectId(userId)
+      userId: new ObjectId(userId),
     });
 
     if (!file) {
