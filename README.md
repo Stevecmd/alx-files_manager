@@ -462,13 +462,17 @@ curl -XPOST 0.0.0.0:5000/files -H "X-Token: c3a19fa3-525d-4ee9-a27b-e1e08b85ce5f
 ```
 
 - Create a folder:
-`curl -XPOST 0.0.0.0:5000/files -H "X-Token: c3a19fa3-525d-4ee9-a27b-e1e08b85ce5f" -H "Content-Type: application/json" -d '{ "name": "images", "type": "folder" }' ; echo ""`
+```sh
+curl -XPOST 0.0.0.0:5000/files -H "X-Token: c3a19fa3-525d-4ee9-a27b-e1e08b85ce5f" -H "Content-Type: application/json" -d '{ "name": "images", "type": "folder" }' ; echo ""
+```
 
 - Upload a file:
-`curl -XPOST 0.0.0.0:5000/files -H "X-Token: c3a19fa3-525d-4ee9-a27b-e1e08b85ce5f" -H "Content-Type: application/json" -d '{ "name": "images", "type": "folder" }' ; echo ""`
+```sh
+curl -XPOST 0.0.0.0:5000/files -H "X-Token: c3a19fa3-525d-4ee9-a27b-e1e08b85ce5f" -H "Content-Type: application/json" -d '{ "name": "images", "type": "folder" }' ; echo ""
+```
 
-- ls /tmp/files_manager/
+- ls /tmp/files_manager/ </br>
 `90c8e949-b4bf-421b-9a6b-1fb5f740eef1`
 
-Upload a file to a folder:
+Upload a file to a folder: </br>
 `python image_upload.py image.jpeg c3a19fa3-525d-4ee9-a27b-e1e08b85ce5f 675334cdf4354f8f4c17591a`
